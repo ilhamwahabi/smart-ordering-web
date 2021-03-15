@@ -7,6 +7,7 @@
     "serve": "vite preview"
   },
   "dependencies": {
+    "mqtt": "^4.2.6",
     "react": "^17.0.0",
     "react-dom": "^17.0.0"
   },
