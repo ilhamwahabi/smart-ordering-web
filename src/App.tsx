@@ -4,9 +4,11 @@ import Swal from 'sweetalert2'
 
 function App() {
   const [form, setForm] = useState({
-    host: "",
-    username: "",
-    password: ""
+    // host: "wss://202.148.1.57:1883",
+    // host: "http://202.148.1.57:8280",
+    host: "mqtt://202.148.1.57:1883",
+    username: "app-smartorderingsystem",
+    password: "G4zwVj1B1qmTDR2V0oY7y2YVqUUe6o"
   })
   const [client, setClient] = useState<null | mqtt.MqttClient>(null);
   const [connectStatus, setConnectStatus] = useState("Not Connected")
@@ -15,7 +17,10 @@ function App() {
   const mqttConnect = () => {
     setConnectStatus('Connecting');
     try {
-      setClient(mqtt.connect(form.host, { username: form.username, password: form.password }));
+      setClient(mqtt.connect(form.host, {
+        username: form.username,
+        password: form.password,
+      }));
     } catch (error) {
       setConnectStatus('Error');
       Swal.fire({
@@ -66,8 +71,8 @@ function App() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <header className="pt-8 pb-2 lg:py-8 px-8 lg:px-0 bg-gray-100">
-        <div className="container mx-auto flex">
+      <header className=" bg-gray-100">
+        <div className="container mx-auto flex pt-8 pb-2 lg:py-8 px-8 lg:px-0">
           <h1 className="text-xl">
             Smart Ordering
           </h1>
@@ -85,9 +90,12 @@ function App() {
           <div className="lg:ml-8 mt-8 lg:mt-0 w-full">
             <div className="px-6 py-4 bg-white rounded-lg shadow-lg">
               <span className="font-bold">{ connectStatus }</span> 
-              <p className="mt-2">
-                { renderNoticeText() }
-              </p>
+              { renderNoticeText()
+                ? <p className="mt-2">
+                    { renderNoticeText() }
+                  </p>
+                : null
+              }
             </div>
           </div>
         </div>
