@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import mqtt from 'mqtt';
+import Swal from 'sweetalert2'
 
 function App() {
   const [form, setForm] = useState({
@@ -8,12 +9,22 @@ function App() {
     password: ""
   })
   const [client, setClient] = useState<null | mqtt.MqttClient>(null);
-  const [connectStatus, setConnectStatus] = useState("")
+  const [connectStatus, setConnectStatus] = useState("Not Connected")
   const [payload, setPayload] = useState({})
   
   const mqttConnect = () => {
     setConnectStatus('Connecting');
-    setClient(mqtt.connect(form.host, { username: form.username, password: form.password }));
+    try {
+      setClient(mqtt.connect(form.host, { username: form.username, password: form.password }));
+    } catch (error) {
+      setConnectStatus('Error');
+      Swal.fire({
+        title: 'Error!',
+        text: error.message,
+        icon: 'error',
+        confirmButtonText: 'Try Again'
+      })
+    }
   };
 
   useEffect(() => {
@@ -41,6 +52,18 @@ function App() {
     mqttConnect()
   }
 
+  const renderNoticeText = () => {
+    if (connectStatus === "Connected") {
+      return "Anda sudah terhubung. Silakan menunggu pesanan masuk."
+    } else if (connectStatus === "Not Connected") {
+      return "Silakan mengisi MQTT Credential agar bisa melihat pesanan yang masuk."
+    } else if (connectStatus === "Error") {
+      return "Terjadi kesalahan. Silakan coba lagi."
+    }
+  }
+
+  console.log(connectStatus)
+
   return (
     <div className="flex flex-col min-h-screen">
       <header className="pt-8 pb-2 lg:py-8 px-8 lg:px-0 bg-gray-100">
@@ -61,7 +84,10 @@ function App() {
           </form>
           <div className="lg:ml-8 mt-8 lg:mt-0 w-full">
             <div className="px-6 py-4 bg-white rounded-lg shadow-lg">
-              Silakan mengisi MQTT Credential agar bisa melihat pesanan yang masuk
+              <span className="font-bold">{ connectStatus }</span> 
+              <p className="mt-2">
+                { renderNoticeText() }
+              </p>
             </div>
           </div>
         </div>

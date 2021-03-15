@@ -12,10 +12,12 @@
     "mqtt": "^4.2.6",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
-    "react-scripts": "^4.0.3"
+    "react-scripts": "^4.0.3",
+    "sweetalert2": "^10.15.5"
   },
   "devDependencies": {
     "@tailwindcss/postcss7-compat": "^2.0.3",
+    "@types/mqtt": "^2.5.0",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "autoprefixer": "^9.8.6",
